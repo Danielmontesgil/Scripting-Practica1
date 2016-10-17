@@ -44,15 +44,15 @@ public class Disparar : MonoBehaviour {
             {
                 while (sube)
                 {
-                    fuerza += 30 * Time.deltaTime;
+                    fuerza += 20 * Time.deltaTime;
 
-                    if (fuerza >= 90)
+                    if (fuerza >= 60)
                         sube = false;
                     break;
                 }
                 while (!sube)
                 {
-                    fuerza -= 30 * Time.deltaTime;
+                    fuerza -= 20 * Time.deltaTime;
                     if (fuerza <= 0)
                         sube = true;
                     break;
@@ -64,6 +64,6 @@ public class Disparar : MonoBehaviour {
                 parar = true;
             }
         }
-		myScroll.GetComponent<Scrollbar> ().size = fuerza / 90;
+		myScroll.GetComponent<Scrollbar> ().size = fuerza / 60;
 	}
 }
