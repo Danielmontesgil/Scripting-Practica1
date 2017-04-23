@@ -2,68 +2,82 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Disparar : MonoBehaviour {
+public class Disparar : MonoBehaviour
+{
 
-    public static bool conPoder;
+    [SerializeField]
+    private GameObject aimLine;
+    [SerializeField]
+    private Scrollbar strengthBar;
 
-	private float fuerza;
-    private bool parar;
-	private bool sube;
-	public Scrollbar myScroll;
+    public static bool withStrength;
+
+    private float strength;
+    private bool isStill;
+    private bool canGetStrength;
     private Rigidbody rb;
 
     void Awake()
     {
-        conPoder = false;
+        canGetStrength = true;
+        isStill = false;
+        withStrength = false;
+        rb = GetComponent<Rigidbody>();
     }
 
-	// Use this for initialization
-	void Start ()
-	{
-		sube = true;
-        rb = GetComponent<Rigidbody>();
-        parar = false;
-    }
-	
-	// Update is called once per frame
-	void Update ()
-	{
-        if (rb.velocity.magnitude <= 1) {
+    void Update()
+    {
+        if (rb.velocity.magnitude <= 1)
+        {
             rb.velocity = Vector3.zero;
-            rb.angularVelocity=Vector3.zero;
-            if (parar)
+            rb.angularVelocity = Vector3.zero;
+            if (isStill)
             {
                 transform.rotation = (new Quaternion(0, 0, 0, 0));
-                parar = false;
+                isStill = false;
             }
             if (Input.GetMouseButtonDown(0))
             {
-                fuerza = 0;
+                strength = 0;
             }
             if (Input.GetMouseButton(0))
             {
-                while (sube)
-                {
-                    fuerza += 20 * Time.deltaTime;
-
-                    if (fuerza >= 60)
-                        sube = false;
-                    break;
-                }
-                while (!sube)
-                {
-                    fuerza -= 20 * Time.deltaTime;
-                    if (fuerza <= 0)
-                        sube = true;
-                    break;
-                }
+                ballStrength();
             }
             if (Input.GetMouseButtonUp(0))
             {
-                GetComponent<Rigidbody>().AddForce(transform.forward * fuerza, ForceMode.Impulse);
-                parar = true;
+                shotBall();
+                aimLine.SetActive(false);
             }
+            else
+                aimLine.SetActive(true);
         }
-		myScroll.GetComponent<Scrollbar> ().size = fuerza / 60;
-	}
+
+        strengthBar.GetComponent<Scrollbar>().size = strength / 60;
+    }
+
+    void ballStrength()
+    {
+        while (canGetStrength)
+        {
+            strength += 30 * Time.deltaTime;
+
+            if (strength >= 60)
+                canGetStrength = false;
+            break;
+        }
+        while (!canGetStrength)
+        {
+            strength -= 30 * Time.deltaTime;
+            if (strength <= 0)
+                canGetStrength = true;
+            break;
+        }
+    }
+
+    void shotBall()
+    {
+        GetComponent<Rigidbody>().AddForce(transform.forward * strength, ForceMode.Impulse);
+        isStill = true;
+    }
 }

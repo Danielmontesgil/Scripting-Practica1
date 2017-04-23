@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +15,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public event Action Puntuar;
+    public event Action punctuate;
 
     private int score;
 
@@ -29,11 +28,11 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField]
-    private Text text;
+    private Text textScore;
     [SerializeField]
-    private Text tiempo;
+    private Text textTime;
 
-    private float pipo;
+    private float hitBall;
 
     private float time;
 
@@ -47,35 +46,35 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        
-        text.text = "Score " + score;
 
-        time = 50;
-        tiempo.text = "Tiempo " + time;
+        textScore.text = "Score " + score;
 
-        pipo = 0;
+        time = 10;
+        textTime.text = "Time " + Mathf.Round(time);
+
+        hitBall = 0;
     }
 
     private void Update()
     {
         time -= 1 * Time.deltaTime;
-        tiempo.text = "Tiempo " + time;
+        textTime.text = "textTime " + Mathf.Round(time);
         if (time <= 0)
         {
             SceneManager.LoadScene("Perdiste");
         }
 
-        if(pipo==2)
+        if (hitBall == 2)
             SceneManager.LoadScene("Ganaste");
     }
 
     public void NotifyHit()
     {
         score++;
-        text.text = "Score: " + score;
-        pipo++;
-        if (Puntuar != null)
-            Puntuar();
+        textScore.text = "Score: " + score;
+        hitBall++;
+        if (punctuate != null)
+            punctuate();
     }
 
     public void Menu()

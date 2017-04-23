@@ -5,7 +5,7 @@ public class DestroyEnemy : MonoBehaviour {
 
     private void Start()
     {
-        GameManager.Instance.Puntuar += DebugPuntuar;
+        GameManager.Instance.punctuate += DebugPuntuar;
     }
 
     private void DebugPuntuar()
@@ -17,9 +17,9 @@ public class DestroyEnemy : MonoBehaviour {
     {
         if (c.gameObject.CompareTag("Player"))
         {
-            if (Disparar.conPoder)
+            if (Disparar.withStrength)
             {
-                Destroy(gameObject, 3);
+                Destroy(gameObject);
                 GameManager.Instance.NotifyHit();
             }
         }

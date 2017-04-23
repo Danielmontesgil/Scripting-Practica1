@@ -1,19 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Apuntar : MonoBehaviour {
+public class Apuntar : MonoBehaviour
+{
+    Vector3 lookPos;
+    void Update()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100))
+        {
+            lookPos = hit.point;
+        }
 
-	float velocidadHorizontal=15f;
-	float h;
+		Vector3 lookDir = lookPos -transform.position;
+		lookDir.y = 0;
 
-	// Update is called once per frame
-	void Update()
-	{
-		h = velocidadHorizontal * Input.GetAxis("Mouse X");
-		transform.Rotate(0, h, 0);
-	}
+		transform.LookAt(transform.position + lookDir, Vector3.up);
+    }
 
-	void OnDrawGizmos() {
-		Debug.DrawRay (transform.position,transform.forward);
-	}
+    void OnDrawGizmos()
+    {
+        Debug.DrawRay(transform.position, transform.forward);
+    }
 }
